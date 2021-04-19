@@ -154,3 +154,12 @@ class BazelObject(ObjectDescription):
         ws_line = nodes.line()
         ws_line += addnodes.desc_addname(text, text)
         signode += ws_line
+
+    def add_target_and_index(self, name, sig, signode):
+        # fullname = '.'.join(filter(None, (package, type, name)))
+        # basename = fullname.partition('(')[0]
+        fullname = 'HABIBI'
+        # note target
+        if fullname not in self.state.document.ids:
+            signode['names'].append(fullname)
+            signode['ids'].append(fullname)

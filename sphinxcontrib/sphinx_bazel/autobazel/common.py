@@ -55,6 +55,7 @@ class AutobazelCommonDirective(Directive):
 
         self.bzl_content = {}
 
+
     @property
     def env(self):
         return self.state.document.settings.env
@@ -99,6 +100,10 @@ class AutobazelCommonDirective(Directive):
         if not os.path.exists(self.workspace_path_abs):
             self.log.error("Given workspace does not exist: {}".format(self.arguments[0]))
             return []
+
+        env = self.state.document.settings.env
+        # breakpoint()
+        env.domaindata['bazel']['objects'][self.arguments[0]] = (env.docname, self.name)
 
         if 'workspace' in self.name:
             return self._handle_workspace()
@@ -732,6 +737,7 @@ class AutobazelCommonDirective(Directive):
 
         return content
 
+
     def _check_docstring(self, doc_string):
         if doc_string is None:
             return ''
@@ -742,7 +748,6 @@ class AutobazelCommonDirective(Directive):
             return new_doc_string
 
         return doc_string
-
 
 class BazelParseException(BaseException):
     pass
