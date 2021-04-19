@@ -156,10 +156,17 @@ class BazelObject(ObjectDescription):
         signode += ws_line
 
     def add_target_and_index(self, name, sig, signode):
-        # fullname = '.'.join(filter(None, (package, type, name)))
-        # basename = fullname.partition('(')[0]
-        fullname = 'HABIBI'
-        # note target
+        fullname = name[0]
         if fullname not in self.state.document.ids:
             signode['names'].append(fullname)
             signode['ids'].append(fullname)
+            signode['first'] = (not self.names)
+            self.state.document.note_explicit_target(signode)
+
+        objects = self.env.domaindata['bazel']['objects']
+        if fullname in objects:
+            self.state_machine.reporter.warning(
+                'duplicate object description of %s, ' % fullname +
+                'other instance in ' + self.env.doc2path(objects[fullname][0]) +
+                ', use :noindex: for one of them',
+                line=self.lineno)
